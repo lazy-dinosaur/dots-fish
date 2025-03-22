@@ -36,9 +36,44 @@ set -g FZF_PREVIEW_FILE_CMD "bat --style=numbers --color=always --line-range :50
 set -g FZF_LEGACY_KEYBINDINGS 0
 
 set -Ux FZF_DEFAULT_OPTS "\
---color=spinner:#f5e0dc,hl:#f38ba8 \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a \
+--multi"
+
+set -gx AIDER_CHAT_LANGUAGE korean
+# set -gx AIDER_SONNET true
+set -gx AIDER_MODEL openrouter/deepseek/deepseek-r1
+set -gx AIDER_WEAK_MODEL openrouter/deepseek/deepseek-r1
+set -gx AIDER_EDITOR_MODEL openrouter/deepseek/deepseek-r1
+# set -gx AIDER_MODEL openrouter/deepseek/deepseek-chat
+#
+# set -gx AIDER_MODEL openrouter/qwen/qwq-32b
+# set -gx AIDER_WEAK_MODEL openrouter/qwen/qwq-32b
+# set -gx AIDER_EDITOR_MODEL openrouter/qwen/qwq-32b
+
+# set -gx AIDER_MODEL openrouter/openai/o3-mini-high
+# set -gx AIDER_WEAK_MODEL openrouter/openai/o3-mini-high
+# set -gx AIDER_EDITOR_MODEL openrouter/openai/o3-mini-high
+
+set -Ux AIDER_CODE_THEME github-dark
+set -Ux AIDER_AUTO_COMMITS false
+set -Ux AIDER_PRETTY true
+set -Ux AIDER_STREAM true
+
+# set -Ux AIDER_SONNET true
+
+set -Ux AIDER_USER_INPUT_COLOR "#a6da95"
+
+set -Ux AIDER_TOOL_OUTPUT_COLOR "#8aadf4"
+set -Ux AIDER_TOOL_ERROR_COLOR "#ed8796"
+set -Ux AIDER_TOOL_WARNING_COLOR "#eed49f"
+set -Ux AIDER_ASSISTANT_OUTPUT_COLOR "#c6a0f6"
+set -Ux AIDER_COMPLETION_MENU_COLOR "#cad3f5"
+set -Ux AIDER_COMPLETION_MENU_BG_COLOR "#24273a"
+set -Ux AIDER_COMPLETION_MENU_CURRENT_COLOR "#181926"
+set -Ux AIDER_COMPLETION_MENU_CURRENT_BG_COLOR "#f4dbd6"
 
 # Define paths and ensure no duplicates
 set -gx PATH $HOME/.bun/bin $PATH
@@ -84,3 +119,12 @@ function tz --wraps tmux --description 'tmux new session to target directory'
 end
 
 # alias obsidian='flatpak run md.obsidian.Obsidian --ozone-platform-hint=wayland --enable-wayland-ime --wayland-text-input-version=3'
+
+function y
+    set tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        builtin cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
+end
